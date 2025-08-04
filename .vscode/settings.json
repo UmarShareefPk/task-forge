@@ -1,0 +1,13 @@
+ {
+    "folder-path-color.folders": [
+          {
+                "path": "src/app",
+                "color": "#FFD700" 
+            },
+            {
+                "path": "src/utils",
+                "color": "#ADD8E6"
+            }
+    ]
+    
+}

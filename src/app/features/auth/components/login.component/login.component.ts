@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import {ThemeService} from '../../../../core/services/theme.service'
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ constructor(
   error = '';
   private authService = inject(AuthService);
   private router = inject(Router);
+  private themeService = inject(ThemeService);
 
   onLogin() {
     this.authService.login(this.username, this.password).subscribe({
@@ -35,4 +37,9 @@ constructor(
       }
     });
   }
+
+toggleTheme() {
+    this.themeService.toggleTheme();
+  }
+
 }
