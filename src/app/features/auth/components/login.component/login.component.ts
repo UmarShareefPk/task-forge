@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import {ThemeService} from '../../../../core/services/theme.service'
+import { LogoComponent } from "../../../../shared/components/app-logo.component";
 
 @Component({
   selector: 'app-login',
   standalone: true, // ✅ this is the key
-  imports: [CommonModule, FormsModule], // ✅ needed for ngIf/ngModel
+  imports: [CommonModule, FormsModule, LogoComponent], // ✅ needed for ngIf/ngModel
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -28,6 +29,7 @@ constructor(
   onLogin() {
     this.authService.login(this.username, this.password).subscribe({
       next: (res:any) => {
+        console.log(res);
         this.authService.saveToken(res.token);
         this.router.navigate(['/tasks']);
       },
