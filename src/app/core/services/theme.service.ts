@@ -9,7 +9,16 @@ export class ThemeService {
 
   constructor() {
     // Load persisted theme or default
+    // const theme = localStorage.getItem('theme');
+    // console.log("theme is: ", theme);
+    // if (theme === 'dark') {
+    //   document.documentElement.classList.add(this.darkClass);
+    // }
+  }
+
+  setInitialTheme():void {
     const theme = localStorage.getItem('theme');
+    console.log("2 theme is: ", theme);
     if (theme === 'dark') {
       document.documentElement.classList.add(this.darkClass);
     }

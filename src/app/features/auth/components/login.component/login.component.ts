@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import {ThemeService} from '../../../../core/services/theme.service'
 import { LogoComponent } from "../../../../shared/components/app-logo.component";
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-login',

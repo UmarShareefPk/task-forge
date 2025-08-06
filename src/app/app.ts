@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { NavComponent } from "./shared/components/nav.component/nav.component";
 import { AuthService } from './features/auth/services/auth.service';
 import { CommonModule } from '@angular/common'; 
 import { reportUnhandledError } from 'rxjs/internal/util/reportUnhandledError';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -13,26 +14,28 @@ import { reportUnhandledError } from 'rxjs/internal/util/reportUnhandledError';
   styleUrl: './app.css'
 })
 export class App {
-  constructor(private authService:AuthService, private router:Router){
+    // Access the computed signal
 
+  constructor(private authService:AuthService, private router:Router, private themeService:ThemeService){
+    effect(() => {
+      this.isUserLoggedIn = this.authService.isLoggedIn();
+      if (!this.isUserLoggedIn) {
+        console.log("User logged out → navigating to /login");
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
- isLoggedIn: boolean = false ;
 
-  // IsLoggedIn(){
-  //     if (!this.authService.isLoggedIn())     
-  //          return false;
-  //  return true;
-  // }
+ isUserLoggedIn:boolean = false;
+  isLoggedIn:any;
 
-  protected readonly title = signal('task-forge');
+
+  protected readonly title = signal('task-forge1');
 
   ngOnInit(): void{
-    this.authService.userLoggedInObs.subscribe((m) => { 
-     this.isLoggedIn = m;
-     console.log("login state changed, his.isLoggedIn", this.isLoggedIn)
-      if(!m)  this.router.navigate(['/login']);
-    });// know as soon as login state is changed
+   this.isLoggedIn = this.authService._isLoggedIn;
+    this.themeService.setInitialTheme();
   }
 
 }

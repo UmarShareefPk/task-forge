@@ -1,5 +1,5 @@
 // src/app/auth/auth.service.ts
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
@@ -11,29 +11,29 @@ export class AuthService {
   private apiUrl = 'https://localhost:7228/api/auth/login';
 
   constructor(){
-     if (localStorage.getItem('token')) {
-      this.userLoggedInSource.next(true);
-    } else {
-      this.userLoggedInSource.next(false);
-    }
+   
   }
-   userLoggedInSource = new BehaviorSubject(false);
-  userLoggedInObs = this.userLoggedInSource.asObservable();
+
+  token = localStorage.getItem('token');
+   private _loggedIn = signal(!!this.token); 
+  readonly _isLoggedIn = computed(() => this._loggedIn()); 
 
   login(username: string, password: string) {
     return this.http.post<any>(this.apiUrl, { Username: username, Password: password })
     .pipe(
       map((m) => {
-        console.log(m);
-         this.userLoggedInSource.next(true);
-         return true;
+      //  console.log(m);
+      
+          this._loggedIn.set(true); 
+         return m;
       }
   ));
   }
 
   logout() {
     localStorage.removeItem('token');
-        this.userLoggedInSource.next(false);
+      //  this.userLoggedInSource.next(false);
+         this._loggedIn.set(false); 
     this.router.navigate(['/login']);
   }
 
