@@ -3,26 +3,47 @@
     <div class="flex h-16 items-center justify-between">
       
       <!-- Logo -->
-      <a href="#" class="flex items-center text-indigo-600 dark:text-indigo-400 font-bold text-lg">
-        <svg class="h-8 w-8 mr-2" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path fill="currentColor"
-            d="M0.41 10.3847C1.14777 7.4194 2.85643 4.7861 5.2639 2.90424C7.6714 1.02234 10.6393 0 13.695 0C16.7507 0 19.7186 1.02234 22.1261 2.90424C24.5336 4.7861 26.2422 7.4194 26.98 10.3847H25.78..." />
-        </svg>
-        Task Forge
-      </a>
-
+      <p class="cursor-pointer" (click)="logoClicked()">
+        <app-logo size="md"></app-logo>
+      </p>
       <!-- Nav Links -->
       <ul class="hidden md:flex space-x-6 text-sm font-medium">
         <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Home</a></li>
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Projects</a></li>
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">About</a></li>
+        <li><a href="#" class="text-gray-600 dark:text-white hover:underline"  (click)="logoClicked()">Tasks</a></li>
+        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Users</a></li>
         <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Contact</a></li>
       </ul>
 
-      <!-- Auth Buttons -->
+     
       <div class="hidden sm:flex space-x-4">
-        <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm font-medium">Login</a>
-        <a href="#" class="bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-white px-4 py-2 rounded text-sm font-medium hover:underline">Register</a>
+        <div class="flex items-center space-x-4 ml-auto relative group">
+          <span class="text-sm text-gray-700 dark:text-gray-200">Welcome, {{ userName}}</span>
+          <!-- Profile Image -->
+          <img [src]="userImageUrl" alt="US"
+            class="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 object-cover" />
+      
+          <!-- Settings icon with dropdown -->
+          <div class="relative">
+            <button (click)="toggleMenu(); $event.stopPropagation()"
+              class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+              <svg class="w-5 h-5 text-gray-600 dark:text-gray-200" fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v.01M12 12v.01M12 18v.01"></path>
+              </svg>
+            </button>
+           <!-- Dropdown -->
+            <div *ngIf="showMenu" id="enuContainer"
+              class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-10">
+              <ul class="py-1 text-sm text-gray-700 dark:text-gray-100">
+                <li><span  class="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" >Profile</span></li>
+                <li><span class="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</span></li>
+                <li><span class="block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="toggleTheme()">{{themeText}}</span></li>
+                <li><span class="block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="logout()">Logout</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      
       </div>
 
       <!-- Mobile Menu Icon -->

@@ -27,6 +27,11 @@ constructor(
   private router = inject(Router);
   private themeService = inject(ThemeService);
 
+  ngOnInit():void {
+    if(this.authService._isLoggedIn())
+       this.router.navigate(['/tasks']);
+  }
+
   onLogin() {
     this.authService.login(this.username, this.password).subscribe({
       next: (res:any) => {
@@ -41,8 +46,6 @@ constructor(
     });
   }
 
-toggleTheme() {
-    this.themeService.toggleTheme();
-  }
+
 
 }

@@ -22,9 +22,7 @@ export class AuthService {
     return this.http.post<any>(this.apiUrl, { Username: username, Password: password })
     .pipe(
       map((m) => {
-      //  console.log(m);
-      
-          this._loggedIn.set(true); 
+                this._loggedIn.set(true); 
          return m;
       }
   ));
@@ -32,8 +30,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
-      //  this.userLoggedInSource.next(false);
-         this._loggedIn.set(false); 
+    this._loggedIn.set(false); 
     this.router.navigate(['/login']);
   }
 

@@ -18,7 +18,8 @@ export class App {
 
   constructor(private authService:AuthService, private router:Router, private themeService:ThemeService){
     effect(() => {
-      this.isUserLoggedIn = this.authService.isLoggedIn();
+      console.log("effect is called");
+      this.isUserLoggedIn = this.authService._isLoggedIn();
       if (!this.isUserLoggedIn) {
         console.log("User logged out → navigating to /login");
         this.router.navigate(['/login']);
@@ -28,13 +29,11 @@ export class App {
 
 
  isUserLoggedIn:boolean = false;
-  isLoggedIn:any;
 
 
   protected readonly title = signal('task-forge1');
 
-  ngOnInit(): void{
-   this.isLoggedIn = this.authService._isLoggedIn;
+  ngOnInit(): void{ 
     this.themeService.setInitialTheme();
   }
 

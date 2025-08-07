@@ -8,17 +8,11 @@ export class ThemeService {
   private readonly darkClass = 'dark';
 
   constructor() {
-    // Load persisted theme or default
-    // const theme = localStorage.getItem('theme');
-    // console.log("theme is: ", theme);
-    // if (theme === 'dark') {
-    //   document.documentElement.classList.add(this.darkClass);
-    // }
+   
   }
 
   setInitialTheme():void {
     const theme = localStorage.getItem('theme');
-    console.log("2 theme is: ", theme);
     if (theme === 'dark') {
       document.documentElement.classList.add(this.darkClass);
     }
@@ -33,6 +27,13 @@ export class ThemeService {
       html.classList.add(this.darkClass);
       localStorage.setItem('theme', 'dark');
     }
+  }
+
+  currentTheme():string{
+    const theme = localStorage.getItem('theme');
+    if(theme)
+      return theme;
+    return "";
   }
 
   isDarkMode(): boolean {

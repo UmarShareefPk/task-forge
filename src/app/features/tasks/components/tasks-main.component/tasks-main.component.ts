@@ -9,8 +9,6 @@ import {AuthService} from '../../../auth/services/auth.service'
 })
 export class TasksMainComponent {
   authService = inject(AuthService);
-  logout() : void{
-    this.authService.logout();
-  }
+  
 
 }
