@@ -8,10 +8,10 @@
       </p>
       <!-- Nav Links -->
       <ul class="hidden md:flex space-x-6 text-sm font-medium">
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Home</a></li>
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline"  (click)="logoClicked()">Tasks</a></li>
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Users</a></li>
-        <li><a href="#" class="text-gray-600 dark:text-white hover:underline">Contact</a></li>
+        <li (click)="logoClicked()"><span class="cursor-pointer flex items-center gap-0.5  text-gray-600 dark:text-white hover:underline"><mat-icon class="text-xl">dashboard</mat-icon> Dashboard</span></li>
+        <li (click)="logoClicked()"><span class="cursor-pointer flex items-center gap-0.5 text-gray-600 dark:text-white hover:underline"><mat-icon class="text-xl">task</mat-icon>  Tasks</span></li>
+        <li (click)="logoClicked()"><span class="cursor-pointer flex items-center gap-0.5 text-gray-600 dark:text-white hover:underline"><mat-icon class="text-xl">group</mat-icon> Users</span></li>
+        <li (click)="logoClicked()"><span class="cursor-pointer flex items-center gap-0.5 text-gray-600 dark:text-white hover:underline"><mat-icon class="text-xl">contact_mail</mat-icon> Contact</span></li>
       </ul>
 
      
@@ -35,10 +35,10 @@
             <div *ngIf="showMenu" id="enuContainer"
               class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg z-10">
               <ul class="py-1 text-sm text-gray-700 dark:text-gray-100">
-                <li><span  class="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" >Profile</span></li>
-                <li><span class="block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</span></li>
-                <li><span class="block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="toggleTheme()">{{themeText}}</span></li>
-                <li><span class="block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="logout()">Logout</span></li>
+                <li><span class="flex items-center gap-0.5 block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" ><mat-icon class="text-xl">person</mat-icon> Profile</span></li>
+                <li><span class="flex items-center gap-0.5 block cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"><mat-icon class="text-xl">settings</mat-icon> Settings</span></li>
+                <li><span class="flex items-center gap-0.5 block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="toggleTheme()"><mat-icon class="text-xl">{{themeText.includes("Dark") ? "dark_mode" : "light_mode"}}</mat-icon>{{themeText}}</span></li>
+                <li><span class="flex items-center gap-0.5 block  cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700" (click)="logout()"><mat-icon class="text-xl">logout</mat-icon>  Logout</span></li>
               </ul>
             </div>
           </div>

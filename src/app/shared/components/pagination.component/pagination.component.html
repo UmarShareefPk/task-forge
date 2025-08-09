@@ -1,0 +1,61 @@
+<div *ngIf="showPagination()" 
+     class="flex flex-wrap items-center justify-between gap-4 p-3  mt-2
+            bg-gray-100 dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+
+  <!-- Records Info -->
+  <div class="text-sm text-gray-700 dark:text-gray-300">
+    {{ information() }}
+  </div>
+
+  <!-- Page Size Selector -->
+  <div class="flex items-center gap-2">
+    <span class="text-gray-600 dark:text-gray-300">Page Size:</span>
+    <select class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-2 py-1 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            [value]="pageSize()"
+            (change)="changePageSize($any($event.target).value)">
+      <option *ngFor="let size of [5, 10, 20, 30, 40, 50, 100]" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Pagination Controls -->
+  <nav>
+    <ul class="flex items-center gap-1">
+      <!-- Previous -->
+      <li>
+        <button (click)="previous()" [disabled]="pageNumber() === 1"
+                class="flex items-center px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white 
+                       hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 transition">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+      </li>
+
+      <!-- Pages Before -->
+      <li *ngIf="pagesBeforeExists()" class="text-gray-500 dark:text-gray-400">…</li>
+
+      <!-- Page Numbers -->
+      <li *ngFor="let page of pages()">
+        <button (click)="changePageNumber(page)"
+          [class]="pageNumber() === page
+            ? 'px-3 py-1 rounded-full bg-indigo-400 text-white hover:bg-indigo-600 transition'
+            : 'px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition'">
+          {{ page }}
+        </button>
+      </li>
+
+      <!-- Pages After -->
+      <li *ngIf="pagesAfterExists()" class="text-gray-500 dark:text-gray-400">…</li>
+
+      <!-- Next -->
+      <li>
+        <button (click)="next()" [disabled]="pageNumber() === totalPages()"
+                class="flex items-center px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white 
+                       hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-50 transition">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>

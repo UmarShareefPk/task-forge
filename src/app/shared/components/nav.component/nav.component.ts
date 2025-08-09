@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { AuthService } from '../../../features/auth/services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-nav',
     standalone: true, 
-  imports: [LogoComponent, CommonModule],
+  imports: [LogoComponent, CommonModule, MatIconModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -16,11 +17,12 @@ export class NavComponent {
     userName = 'Umar';
   userImageUrl = 'https://i.pravatar.cc/100';
   showMenu:boolean = false;
-  themeText:string = "";
+  themeText:string = "dark";
 
    constructor(private router:Router, private themeService:ThemeService, private authService:AuthService) {}
 
- onNgInit():void {
+ ngOnInit():void {
+  this.themeText = this.themeService.currentTheme();
   this.setThemeText();
  }
 
