@@ -1,98 +1,115 @@
 <div class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
-  
-  
-  
-  <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Tasks</h1>
+
+  <app-page-title
+  title="Tasks"
+  subtitle="Manage and track all ongoing work"
+  icon="check_circle">
+</app-page-title>
 
 
- <app-loading *ngIf="loading"></app-loading>
-<table
-  *ngIf="!loading && tasks.length"
-  class="w-full border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm"
->
-  <thead class="bg-gray-100 dark:bg-gray-800">
-    <tr>
-      <th
-        *ngFor="let header of ['Title', 'Status', 'Priority', 'Assigned To', 'Due Date', 'Created At']"
-        class="px-5 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700"
-      >
-        {{ header }}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr
-      *ngFor="let task of tasks; let i = index"
-      class="transition-colors duration-200"
-      [ngClass]="{
-        'bg-white dark:bg-gray-900': i % 2 === 0,
-        'bg-gray-50 dark:bg-gray-800': i % 2 !== 0
-      }"
+  <!-- Search box -->
+  <div class="mb-4 flex justify-start">
+    <div class="relative w-full sm:w-64">
+      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <span class="material-icons text-gray-400">search</span>
+      </span>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Search tasks..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
+               rounded-lg shadow-sm focus:outline-none focus:ring-2 
+               focus:ring-indigo-500 focus:border-indigo-500 
+               bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+               placeholder-gray-400 dark:placeholder-gray-500"
+      />
+    </div>
+  </div>
+
+  <app-loading *ngIf="loading"></app-loading>
+
+  <div class="overflow-x-auto">
+    <table
+      *ngIf="!loading && tasks.length"
+      class="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm text-sm sm:text-base"
     >
-      <!-- Title -->
-      <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-100 font-medium">
-        {{ task.title }}
-      </td>
+      <thead class="bg-gray-100 dark:bg-gray-800">
+        <tr>
+          <th
+            *ngFor="let header of ['Title', 'Status', 'Priority', 'Assigned To', 'Due Date', 'Created At']"
+            class="px-3 sm:px-5 py-2 sm:py-3 text-left font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700"
+          >
+            {{ header }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let task of tasks; let i = index"
+          class="transition-colors duration-200"
+          [ngClass]="{
+            'bg-white dark:bg-gray-900': i % 2 === 0,
+            'bg-gray-50 dark:bg-gray-800': i % 2 !== 0
+          }"
+        >
+          <!-- Title -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 font-medium">
+            {{ task.title }}
+          </td>
 
-      <!-- Status -->
-      <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-100 ">
-        <div class="flex items-center gap-2">
-        <span class="material-icons {{ getStatusIcon(task.status).color }}">
-          {{ getStatusIcon(task.status).icon }}
-        </span>
-        <span class="capitalize">{{ task.status }}</span>
-        </div>
-      </td>
+          <!-- Status -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
+            <div class="flex items-center gap-2">
+              <span class="material-icons {{ (task.status | iconMap:'status').color }}">
+                {{ (task.status | iconMap:'status').icon }}
+              </span>
+              <span class="capitalize">{{ task.status }}</span>
+            </div>
+          </td>
 
-      <!-- Priority -->
-      <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-100">
-        <div class="flex items-center gap-2">
-        <span class="material-icons {{ getSeverityIcon(task.priority).color }}">
-          {{ getSeverityIcon(task.priority).icon }}
-        </span>
-        <span class="capitalize">{{ task.priority }}</span>
-        </div>  
-      </td>
+          <!-- Priority -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
+            <div class="flex items-center gap-2">
+              <span class="material-icons {{ (task.priority | iconMap:'severity').color }}">
+                {{ (task.priority | iconMap:'severity').icon }}
+              </span>
+              <span class="capitalize">{{ task.priority }}</span>
+            </div>
+          </td>
 
-      <!-- Assigned To -->
-      <td class="px-5 py-3 text-sm capitalize text-gray-800 dark:text-gray-100">
-        {{ task.assignedTo }}
-      </td>
+          <!-- Assigned To -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 capitalize text-gray-800 dark:text-gray-100">
+            {{ task.assignedTo }}
+          </td>
 
-      <!-- Due Date with custom tooltip -->
-      <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-100 relative group">
-        <span class="cursor-default">
-          {{ task.dueDate | relativeTime }}
-        </span>
-      <div
-  class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
-         opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100
-         transition-all duration-200 ease-out
-         bg-gray-800 dark:bg-gray-900 text-white text-xs rounded-lg px-3 py-1 shadow-lg
-         border border-gray-700 dark:border-gray-600
-         whitespace-nowrap z-50 pointer-events-none"
->
-  {{ task.dueDate | relativeTime:true }}
+          <!-- Due Date -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
+            <app-tooltip
+              [displayText]="task.dueDate | relativeTime"
+              [tooltipText]="task.dueDate | relativeTime:true">
+            </app-tooltip>
+          </td>
+
+          <!-- Created At -->
+          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
+            <app-tooltip
+              [displayText]="task.createdAt | relativeTime"
+              [tooltipText]="task.createdAt | relativeTime:true">
+            </app-tooltip>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">
+    <app-pagination
+      [initialPageNumber]="pageNumber"
+      [totalRecords]="totalCount"
+      (pageNumberChanged)="pageNumberChanged($event)"
+      (pageSizeChanged)="pageSizeChanged($event)"
+    ></app-pagination>
+  </div>
 
 </div>
-      </td>
-
-      <!-- Created At with native title -->
-      <td
-        class="px-5 py-3 text-sm text-gray-800 dark:text-gray-100"
-        [title]="task.createdAt | relativeTime:true"
-      >
-        {{ task.createdAt | relativeTime }}
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-   <app-pagination [initialPageNumber]="pageNumber"  [totalRecords]="totalCount" 
-   (pageNumberChanged)="pageNumberChanged($event)" (pageSizeChanged)="pageSizeChanged($event)"
-   ></app-pagination>
-
-
-</div>
-

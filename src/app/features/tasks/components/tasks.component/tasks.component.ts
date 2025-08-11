@@ -5,10 +5,16 @@ import { Task } from '../../models/task.model';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
 import { PaginationComponent } from '../../../../shared/components/pagination.component/pagination.component';
 import { LoadingComponent } from "../../../../shared/components/loading.component";
+import { IconMapPipe } from "../../../../shared/pipes/icon-map.pipe";
+import { TooltipComponent } from "../../../../shared/components/tooltip.component";
+import { PageTitleComponent } from "../../../../shared/components/page-title.component";
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tasks',
-  imports: [CommonModule, DatePipe, RelativeTimePipe, PaginationComponent, LoadingComponent],
+  imports: [CommonModule, DatePipe, RelativeTimePipe, FormsModule,
+     PaginationComponent, LoadingComponent, IconMapPipe, TooltipComponent, PageTitleComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
@@ -19,39 +25,30 @@ export class TasksComponent implements OnInit {
   pageSize = 5;
   pageNumber = 1;
   loading = true;
+  searchText = '';
+  private searchSubject = new Subject<string>();
 
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService) {
+       this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(text => {
+        this.pageNumber = 1; // reset to first page when searching
+        this.loadTasks(text);
+      });
+  }
 
-  statusIconMap: Record<string, { icon: string; color: string }> = {
-  new:        { icon: 'fiber_new',     color: 'text-blue-500' },
-  inprogress: { icon: 'autorenew',     color: 'text-yellow-500' },
-  late:       { icon: 'schedule',      color: 'text-red-500' },
-  closed:   { icon: 'check_circle',  color: 'text-green-500' }
-};
-
-severityIconMap: Record<string, { icon: string; color: string }> = {
-  low:       { icon: 'low_priority',   color: 'text-gray-500' },
-  medium:    { icon: 'drag_handle',    color: 'text-yellow-600' },
-  high:      { icon: 'priority_high',  color: 'text-orange-500' },
-  critical:  { icon: 'error',          color: 'text-red-600' }
-};
-
-getStatusIcon(status: string) {
-  return this.statusIconMap[status.toLowerCase()] || { icon: 'help', color: 'text-gray-400' };
-}
-
-getSeverityIcon(severity: string) {
-  return this.severityIconMap[severity.toLowerCase()] || { icon: 'help', color: 'text-gray-400' };
-}
+    onSearchChange(value: string) {
+    this.searchSubject.next(value);
+  }
 
   
   ngOnInit(): void {
     this.loadTasks();
   }
 
-  loadTasks() {
+  loadTasks(search: string = '') {
     this.loading = true;
-    this.taskService.getPagedTasks(this.pageSize, this.pageNumber).subscribe({
+    this.taskService.getPagedTasks(this.pageSize, this.pageNumber, 'createdAt', 'desc', this.searchText).subscribe({
       next: (res) => {
        // console.log(res);
         this.tasks = res.items;
