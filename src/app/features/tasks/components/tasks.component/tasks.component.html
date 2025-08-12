@@ -1,115 +1,137 @@
-<div class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 py-6">
+  <div class="container mx-auto">
+    <div
+      class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
+    >
+      <!-- Page Title -->
+      <app-page-title
+        title="Tasks"
+        subtitle="Manage and track all ongoing work"
+        icon="check_circle"
+      >
+      </app-page-title>
 
-  <app-page-title
-  title="Tasks"
-  subtitle="Manage and track all ongoing work"
-  icon="check_circle">
-</app-page-title>
+      <!-- Search box -->
+      <div class="mb-4 flex justify-start">
+        <div class="relative w-full sm:w-64">
+          <span
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+          >
+            <span class="material-icons text-gray-400">search</span>
+          </span>
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search tasks..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
+                   rounded-lg shadow-sm focus:outline-none focus:ring-2 
+                   focus:ring-indigo-500 focus:border-indigo-500 
+                   bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                   placeholder-gray-400 dark:placeholder-gray-500 transition"
+          />
+        </div>
+      </div>
 
+      <!-- Loading -->
+      <app-loading *ngIf="loading"></app-loading>
 
-  <!-- Search box -->
-  <div class="mb-4 flex justify-start">
-    <div class="relative w-full sm:w-64">
-      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <span class="material-icons text-gray-400">search</span>
-      </span>
-      <input
-        type="text"
-        [(ngModel)]="searchText"
-        (ngModelChange)="onSearchChange($event)"
-        placeholder="Search tasks..."
-        class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
-               rounded-lg shadow-sm focus:outline-none focus:ring-2 
-               focus:ring-indigo-500 focus:border-indigo-500 
-               bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-               placeholder-gray-400 dark:placeholder-gray-500"
-      />
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table
+          *ngIf="!loading && tasks.length"
+          class="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm text-sm sm:text-base"
+        >
+          <thead class="bg-gray-100 dark:bg-gray-800">
+            <tr>
+              <th
+                *ngFor="let header of ['Title', 'Status', 'Priority', 'Assigned To', 'Due Date', 'Created At']"
+                class="px-3 sm:px-5 py-2 sm:py-3 text-left font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700"
+              >
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let task of tasks; let i = index"
+              class="transition-colors duration-200"
+              [ngClass]="{
+                'bg-white dark:bg-gray-900': i % 2 === 0,
+                'bg-gray-50 dark:bg-gray-800': i % 2 !== 0
+              }"
+            >
+              <!-- Title -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 font-medium">
+                {{ task.title }}
+              </td>
+
+              <!-- Status -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
+                <div class="flex items-center gap-2">
+                  <span class="material-icons {{ (task.status | iconMap:'status').color }}">
+                    {{ (task.status | iconMap:'status').icon }}
+                  </span>
+                  <span class="capitalize">{{ task.status }}</span>
+                </div>
+              </td>
+
+              <!-- Priority -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
+                <div class="flex items-center gap-2">
+                  <span class="material-icons {{ (task.priority | iconMap:'severity').color }}">
+                    {{ (task.priority | iconMap:'severity').icon }}
+                  </span>
+                  <span class="capitalize">{{ task.priority }}</span>
+                </div>
+              </td>
+
+              <!-- Assigned To -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 capitalize text-gray-800 dark:text-gray-100">
+                {{ task.assignedTo }}
+              </td>
+
+              <!-- Due Date -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
+                <app-tooltip
+                  [displayText]="task.dueDate | relativeTime"
+                  [tooltipText]="task.dueDate | relativeTime:true"
+                >
+                </app-tooltip>
+              </td>
+
+              <!-- Created At -->
+              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
+                <app-tooltip
+                  [displayText]="task.createdAt | relativeTime"
+                  [tooltipText]="task.createdAt | relativeTime:true"
+                >
+                </app-tooltip>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+          <!-- No Data Found -->
+      <div
+        *ngIf="!loading && tasks.length === 0"
+        class="flex flex-col items-center justify-center py-16 text-center text-gray-500 dark:text-gray-400"
+      >
+        <span class="material-icons text-6xl mb-3 text-gray-300 dark:text-gray-600">inbox</span>
+        <p class="text-lg font-medium">No Data Found</p>
+        <p class="text-sm">Try adjusting your search or filters</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="mt-4">
+        <app-pagination
+          [initialPageNumber]="pageNumber"
+          [totalRecords]="totalCount"
+          (pageNumberChanged)="pageNumberChanged($event)"
+          (pageSizeChanged)="pageSizeChanged($event)"
+        ></app-pagination>
+      </div>
     </div>
   </div>
-
-  <app-loading *ngIf="loading"></app-loading>
-
-  <div class="overflow-x-auto">
-    <table
-      *ngIf="!loading && tasks.length"
-      class="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm text-sm sm:text-base"
-    >
-      <thead class="bg-gray-100 dark:bg-gray-800">
-        <tr>
-          <th
-            *ngFor="let header of ['Title', 'Status', 'Priority', 'Assigned To', 'Due Date', 'Created At']"
-            class="px-3 sm:px-5 py-2 sm:py-3 text-left font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700"
-          >
-            {{ header }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let task of tasks; let i = index"
-          class="transition-colors duration-200"
-          [ngClass]="{
-            'bg-white dark:bg-gray-900': i % 2 === 0,
-            'bg-gray-50 dark:bg-gray-800': i % 2 !== 0
-          }"
-        >
-          <!-- Title -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 font-medium">
-            {{ task.title }}
-          </td>
-
-          <!-- Status -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
-            <div class="flex items-center gap-2">
-              <span class="material-icons {{ (task.status | iconMap:'status').color }}">
-                {{ (task.status | iconMap:'status').icon }}
-              </span>
-              <span class="capitalize">{{ task.status }}</span>
-            </div>
-          </td>
-
-          <!-- Priority -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
-            <div class="flex items-center gap-2">
-              <span class="material-icons {{ (task.priority | iconMap:'severity').color }}">
-                {{ (task.priority | iconMap:'severity').icon }}
-              </span>
-              <span class="capitalize">{{ task.priority }}</span>
-            </div>
-          </td>
-
-          <!-- Assigned To -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 capitalize text-gray-800 dark:text-gray-100">
-            {{ task.assignedTo }}
-          </td>
-
-          <!-- Due Date -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
-            <app-tooltip
-              [displayText]="task.dueDate | relativeTime"
-              [tooltipText]="task.dueDate | relativeTime:true">
-            </app-tooltip>
-          </td>
-
-          <!-- Created At -->
-          <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
-            <app-tooltip
-              [displayText]="task.createdAt | relativeTime"
-              [tooltipText]="task.createdAt | relativeTime:true">
-            </app-tooltip>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="mt-4">
-    <app-pagination
-      [initialPageNumber]="pageNumber"
-      [totalRecords]="totalCount"
-      (pageNumberChanged)="pageNumberChanged($event)"
-      (pageSizeChanged)="pageSizeChanged($event)"
-    ></app-pagination>
-  </div>
-
 </div>

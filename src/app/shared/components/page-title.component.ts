@@ -8,9 +8,9 @@ import { Component, Input } from '@angular/core';
   template: `
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
       <!-- Title + Icon -->
-      <div class="flex items-center gap-3">
-        <span *ngIf="icon" class="material-icons text-indigo-500 text-3xl">{{ icon }}</span>
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
+      <div class="flex items-center gap-2">
+        <span *ngIf="icon" class="material-icons text-indigo-500 text-2xl">{{ icon }}</span>
+        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
           {{ title }}
         </h1>
       </div>

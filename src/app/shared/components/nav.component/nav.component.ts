@@ -18,6 +18,19 @@ export class NavComponent {
   userImageUrl = 'https://i.pravatar.cc/100';
   showMenu:boolean = false;
   themeText:string = "dark";
+  unreadCount = 3; // Example
+showNotifications = false;
+notifications = [
+  { title: 'New task assigned to you', time: '2 mins ago' },
+  { title: 'Project deadline updated', time: '1 hour ago' },
+  { title: 'New comment on your post', time: 'Yesterday' },
+];
+
+mobileMenuOpen = false;
+
+toggleMobileMenu() {
+  this.mobileMenuOpen = !this.mobileMenuOpen;
+}
 
    constructor(private router:Router, private themeService:ThemeService, private authService:AuthService) {}
 
@@ -25,6 +38,14 @@ export class NavComponent {
   this.themeText = this.themeService.currentTheme();
   this.setThemeText();
  }
+
+ toggleNotifications() {
+  this.showNotifications = !this.showNotifications;
+}
+
+viewAllNotifications() {
+  // Navigate to notifications page
+}
 
  setThemeText():void {
   let theme = this.themeService.currentTheme();
@@ -39,7 +60,6 @@ export class NavComponent {
   }
 
     @ViewChild('menuContainer') menuRef!: ElementRef;
-
  
 
    @HostListener('document:click', ['$event'])
@@ -55,6 +75,7 @@ export class NavComponent {
   }
 
   logout() : void{
+    alert("logging out");
     this.authService.logout();
   }
 
