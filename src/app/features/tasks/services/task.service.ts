@@ -32,4 +32,8 @@ export class TaskService {
 
     return this.http.get<PagedResult<Task>>(`${environment.apiBaseUrl}/taskitems/paged`, { params });
   }
+
+  updateTask(id: string, changes: Partial<Task>) {
+  return this.http.patch(`/api/tasks/${id}`, changes);
+}
 }

@@ -1,0 +1,199 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="grid gap-6 lg:grid-cols-3">
+    
+    <!-- SECTION 1: Task Overview -->
+    <div class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+      <div class="flex justify-between items-start">
+        <div class="flex-1">
+          <input
+            [(ngModel)]="task.title"
+            (blur)="updateTaskField('title', task.title)"
+            class="text-2xl font-bold w-full border-0 bg-transparent focus:ring-0 text-gray-900 dark:text-white"
+          />
+          <textarea
+            [(ngModel)]="task.description"
+            (blur)="updateTaskField('description', task.description)"
+            rows="3"
+            class="mt-3 w-full resize-none border-0 bg-transparent focus:ring-0 text-gray-700 dark:text-gray-300"
+          ></textarea>
+        </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+          Created by <span class="font-medium">{{ task.createdBy }}</span>
+        </div>
+      </div>
+
+      <!-- Attachments -->
+      <div class="mt-4">
+        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Attachments</label>
+        <div class="mt-2 flex gap-3 flex-wrap">
+          <div class="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-lg text-sm cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+            <span class="material-icons text-gray-500">attach_file</span> design.png
+          </div>
+          <!-- Add more attachments here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Task Fields -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 space-y-4">
+           
+      <!-- Status -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+        <select
+          [(ngModel)]="task.status"
+          (change)="updateTaskField('status', task.status)"
+          class="w-full rounded-lg border-gray-300 px-3 py-3 shadow-sm dark:border-gray-600 dark:bg-gray-900 dark:text-white">
+          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+
+      <!-- Priority -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+        <select
+          [(ngModel)]="task.priority"
+          (change)="updateTaskField('priority', task.priority)"
+          class="w-full rounded-lg border-gray-300 px-3 py-3 shadow-sm dark:border-gray-600 dark:bg-gray-900 dark:text-white">
+          <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+  <!-- Assignee Custom Dropdown -->
+        <div class="relative" (clickOutside)="isAssigneeOpen = false">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assignee</label>
+
+        <div appClickOutside (clickOutside)="closeDropdown()"
+            class="w-full rounded-lg border border-gray-300 px-3 py-3 shadow-sm dark:border-gray-600 dark:bg-gray-900 dark:text-white flex justify-between items-center cursor-pointer"
+            (click)="isAssigneeOpen = !isAssigneeOpen"
+        >
+            <span>{{ selectedAssignee?.name || 'Select Assignee' }}</span>
+            <span class="material-icons text-gray-400">expand_more</span>
+        </div>
+
+        <!-- Dropdown -->
+        <div
+            *ngIf="isAssigneeOpen"
+            class="absolute z-50 mt-1 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-64 overflow-auto"
+        >
+            <!-- Search Box -->
+            <div class="p-2 border-b border-gray-200 dark:border-gray-700">
+            <input
+                type="text"
+                [(ngModel)]="assigneeSearch"
+                placeholder="Search..."
+                class="w-full rounded-md border border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-white px-2 py-1 text-sm"
+            />
+            </div>
+
+            <!-- User List -->
+            <div *ngFor="let user of filteredUsers()" (click)="selectAssignee(user)" class="px-3 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2">
+            <img [src]="user.avatarUrl" alt="" class="w-6 h-6 rounded-full" />
+            <span>{{ user.name }}</span>
+            </div>
+
+            <!-- No Results -->
+            <div *ngIf="filteredUsers().length === 0" class="px-3 py-2 text-gray-500 text-sm">No users found</div>
+        </div>
+        </div>
+
+
+      <!-- Dates -->
+      <div class="flex flex-col gap-2 mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <div>Created:  <app-tooltip
+                  [displayText]="task.createdAt | relativeTime"
+                  [tooltipText]="task.createdAt | relativeTime:true"
+                >
+                </app-tooltip>
+            </div>
+        <div>Updated: 
+             <app-tooltip
+                  [displayText]="task.updatedAt | relativeTime"
+                  [tooltipText]="task.updatedAt | relativeTime:true"
+                >
+                </app-tooltip>
+        </div>
+        <div>Due: <input type="date" [(ngModel)]="task.dueDate" (change)="updateTaskField('dueDate', task.dueDate)"
+          class="bg-transparent border-b border-gray-300 dark:border-gray-600 focus:outline-none"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 & 4: Comments and Activity -->
+  <div class="grid gap-6 lg:grid-cols-2 mt-6">
+    <!-- Comments -->
+ <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Comments</h3>
+
+  <!-- Loop through comments -->
+  <div *ngFor="let comment of comments" class="mb-4 relative bg-gray-50 dark:bg-gray-800 p-3 rounded-lg">
+    
+    <!-- Comment Header -->
+    <div class="flex items-center gap-3 mb-2">
+      <img
+        [src]="comment.avatarUrl || 'assets/default-avatar.png'"
+        alt="{{ comment.userId }}"
+        class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-700"
+      />
+      <div>
+        <p class="text-sm font-semibold text-gray-900 dark:text-white">
+          {{ comment.userId || 'Unknown User' }}
+        </p>
+        <small class="text-xs text-gray-500">{{ comment.createdAt | date:'short' }}</small>
+      </div>
+    </div>
+
+    <!-- Editable comment -->
+    <textarea
+      *ngIf="comment.isEditing"
+      [(ngModel)]="comment.text"
+      (blur)="saveComment(comment)"
+      rows="2"
+      class="w-full rounded-lg border-gray-300 px-3 py-2 shadow-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+    </textarea>
+
+    <!-- Normal comment -->
+    <p *ngIf="!comment.isEditing" class="text-gray-800 dark:text-gray-200">
+      {{ comment.text }}
+    </p>
+
+    <!-- Edit icon for owner -->
+    <button
+      *ngIf="comment.userId === currentUserId && !comment.isEditing"
+      (click)="comment.isEditing = true"
+      class="absolute top-2 right-2 text-gray-400 hover:text-indigo-500"
+    >
+      <span class="material-icons text-sm">edit</span>
+    </button>
+  </div>
+
+  <!-- Add Comment -->
+  <div class="mt-4 flex gap-2">
+    <input
+      [(ngModel)]="newComment"
+      placeholder="Add a comment..."
+      class="flex-1 rounded-lg border-gray-300 px-3 py-2 shadow-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+    />
+    <button
+      (click)="addComment()"
+      class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+    >
+      Post
+    </button>
+  </div>
+</div>
+
+
+    <!-- Activity -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Activity</h3>
+      <div *ngFor="let activity of activities" class="flex items-start gap-3 mb-3">
+        <span class="material-icons text-indigo-500 flex-shrink-0">history</span>
+        <div>
+          <p class="text-gray-800 dark:text-gray-200">{{ activity.message }}</p>
+          <small class="text-xs text-gray-500">{{ activity.timestamp | date:'short' }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

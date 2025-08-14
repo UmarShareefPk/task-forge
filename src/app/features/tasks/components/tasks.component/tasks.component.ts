@@ -19,6 +19,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent implements OnInit {
+viewTaskDetails(taskId: string) {
+    // Navigate to task details page with the selected task ID
+    window.location.href = `/task-details?taskId=${taskId}`;
+
+}
   
    tasks: Task[] = [];
   totalCount = 0;
