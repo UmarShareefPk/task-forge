@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-tasks',
-  imports: [CommonModule, DatePipe, RelativeTimePipe, FormsModule,
+  imports: [CommonModule,  RelativeTimePipe, FormsModule,
      PaginationComponent, LoadingComponent, IconMapPipe, TooltipComponent, PageTitleComponent],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'

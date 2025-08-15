@@ -1,6 +1,10 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-4px); }
@@ -16,4 +20,82 @@
 }
 .animate-slideDown {
   animation: slideDown 0.2s ease-out;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* Dark mode for Angular Material (Tailwind's .dark class) */
+
+/* Dark mode outline color fix */
+.dark .custom-date-field.mat-mdc-form-field-appearance-outline
+  .mat-mdc-notched-outline__leading,
+.dark .custom-date-field.mat-mdc-form-field-appearance-outline
+  .mat-mdc-notched-outline__notch,
+.dark .custom-date-field.mat-mdc-form-field-appearance-outline
+  .mat-mdc-notched-outline__trailing {
+  border-color: greenyellow !important; /* Tailwind gray-600 */
+}
+
+/* Dark mode outline when focused */
+.dark .custom-date-field .mat-mdc-form-field-appearance-outline.mat-focused
+  .mat-mdc-notched-outline__leading,
+.dark .custom-date-field.mat-mdc-form-field-appearance-outline.mat-focused
+  .mat-mdc-notched-outline__notch,
+.dark .custom-date-field.mat-mdc-form-field-appearance-outline.mat-focused
+  .mat-mdc-notched-outline__trailing {
+  border-color: red !important; /* Tailwind indigo-400 */
+}
+
+.dark .mat-form-field{
+  border-color: #4b5563 !important; /* Tailwind gray-600 */
+}
+
+.custom-date-field .mat-form-field-flex {
+  background-color: transparent !important;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.25rem 0.75rem;
+}
+
+.dark .custom-date-field .mat-form-field-flex {
+  background-color: transparent !important;
+  border: 1px solid #4b5563; /* gray-600 */
+}
+
+.custom-date-field input {
+  color: #111827 !important; /* gray-900 */
+}
+
+.dark .custom-date-field input {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+/* Calendar popup dark mode */
+.dark .mat-datepicker-content {
+  background-color: #1f2937 !important; /* gray-800 */
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+.dark .mat-calendar-body-cell-content {
+  color: #e5e7eb !important;
+}
+
+/* Placeholder text colors */
+.custom-date-field input::placeholder {
+  color: #6b7280 !important; /* gray-500 */
+}
+.dark .custom-date-field input::placeholder {
+  color: #9ca3af !important; /* gray-400 */
+}
+
+
+.dark .mat-calendar-body-selected,
+.dark .mat-calendar-body-active {
+  background-color: #4f46e5 !important; /* indigo-600 */
+  color: white !important;
+}
+
+.dark .mat-calendar-body-today {
+  border-color: #818cf8 !important; /* indigo-400 */
 }

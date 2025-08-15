@@ -7,9 +7,23 @@ import { ClickOutsideDirective } from '../../../../shared/directives/click-outsi
 import { TooltipComponent } from "../../../../shared/components/tooltip.component";
 import { RelativeTimePipe } from "../../../../shared/pipes/relative-time.pipe";
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-task-details.components',
-  imports: [CommonModule, FormsModule, ClickOutsideDirective, TooltipComponent, RelativeTimePipe],
+  imports: [CommonModule, FormsModule, ClickOutsideDirective, TooltipComponent, RelativeTimePipe,
+     MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './task-details.components.html',
   styleUrl: './task-details.components.css'
 })

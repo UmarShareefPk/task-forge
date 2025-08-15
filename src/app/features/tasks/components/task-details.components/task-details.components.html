@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-6">
+<div class="container mx-auto px-4 py-6 min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
   <div class="grid gap-6 lg:grid-cols-3">
     
     <!-- SECTION 1: Task Overview -->
@@ -113,8 +113,19 @@
                 >
                 </app-tooltip>
         </div>
-        <div>Due: <input type="date" [(ngModel)]="task.dueDate" (change)="updateTaskField('dueDate', task.dueDate)"
-          class="bg-transparent border-b border-gray-300 dark:border-gray-600 focus:outline-none"></div>
+        <div class=" w-full">
+        
+            Due Date:
+            <mat-form-field appearance="outline" class="custom-date-field dark:text-gray-200">
+        
+                <input matInput [matDatepicker]="picker" [(ngModel)]="task.dueDate"
+                    (dateChange)="updateTaskField('dueDate', task.dueDate)" class="text-gray-500 dark:text-gray-300" />
+                <mat-datepicker-toggle matSuffix [for]="picker"
+                    class="text-gray-500 dark:text-gray-300"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        
+        </div>
       </div>
     </div>
   </div>
