@@ -116,10 +116,10 @@
         <div class=" w-full">
         
             Due Date:
-            <mat-form-field appearance="outline" class="custom-date-field dark:text-gray-200">
+            <mat-form-field appearance="outline" class="custom-date-field border-none dark:text-gray-200">
         
                 <input matInput [matDatepicker]="picker" [(ngModel)]="task.dueDate"
-                    (dateChange)="updateTaskField('dueDate', task.dueDate)" class="text-gray-500 dark:text-gray-300" />
+                    (dateChange)="updateTaskField('dueDate', task.dueDate)" class="text-gray-500 border-none dark:text-gray-300" />
                 <mat-datepicker-toggle matSuffix [for]="picker"
                     class="text-gray-500 dark:text-gray-300"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
