@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../../core/services/theme.service';
 import { AuthService } from '../../../features/auth/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 
 @Component({
   selector: 'app-nav',
     standalone: true, 
-  imports: [LogoComponent, CommonModule, MatIconModule],
+  imports: [LogoComponent, CommonModule, MatIconModule, ClickOutsideDirective],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
@@ -58,17 +59,7 @@ viewAllNotifications() {
    toggleMenu() {   
     this.showMenu = !this.showMenu;
   }
-
-    @ViewChild('menuContainer') menuRef!: ElementRef;
- 
-
-   @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const clickedInside = this.menuRef?.nativeElement.contains(event.target);
-    if (!clickedInside) {
-      this.showMenu = false;
-    }
-  }
+   
 
   logoClicked():void {
       this.router.navigate(['/tasks'])

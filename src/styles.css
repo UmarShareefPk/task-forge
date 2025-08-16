@@ -51,15 +51,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-color: #4b5563 !important; /* Tailwind gray-600 */
 }
 
+
 .custom-date-field .mat-form-field-flex {
   background-color: transparent !important;
   border: 1px solid #d1d5db; /* gray-300 */
-  border-radius: 0.5rem; /* rounded-lg */
   padding: 0.25rem 0.75rem;
 }
 
 .dark .custom-date-field .mat-form-field-flex {
   background-color: transparent !important;
+  border: 1px solid #4b5563; /* gray-600 */
+}
+
+.custom-date-field .mat-mdc-text-field-wrapper{
+   border-color: rgb(209 213 219 / var(--tw-border-opacity));
+      border-radius: 0.5rem !important; /* rounded-lg */
+}
+
+.dark .custom-date-field .mat-mdc-text-field-wrapper{
+   background-color: transparent !important;
   border: 1px solid #4b5563; /* gray-600 */
 }
 
