@@ -66,7 +66,7 @@ viewAllNotifications() {
   }
 
   logout() : void{
-    alert("logging out");
+   // alert("logging out");
     this.authService.logout();
   }
 

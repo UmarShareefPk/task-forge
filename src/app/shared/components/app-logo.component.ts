@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-logo',
   standalone: true,
@@ -25,6 +26,7 @@ import { Component, Input } from '@angular/core';
       <span class="text-gray-900 dark:text-white">
         Task<span class="text-indigo-600 dark:text-indigo-400">Forge</span>
       </span>
+      <!-- <img src="../assets/logo.png" alt="TaskForge Logo"  /> -->
     </div>
   `,
   styles: [],
