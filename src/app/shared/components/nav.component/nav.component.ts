@@ -21,11 +21,17 @@ export class NavComponent {
   themeText:string = "dark";
   unreadCount = 3; // Example
 showNotifications = false;
-notifications = [
-  { title: 'New task assigned to you', time: '2 mins ago' },
-  { title: 'Project deadline updated', time: '1 hour ago' },
-  { title: 'New comment on your post', time: 'Yesterday' },
-];
+  notifications = [
+    { title: 'New task assigned to you', time: '2 mins ago' },
+    { title: 'Project deadline updated', time: '1 hour ago' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+    { title: 'New comment on your post', time: 'Yesterday' },
+
+  ];
 
 mobileMenuOpen = false;
 
@@ -38,6 +44,10 @@ toggleMobileMenu() {
  ngOnInit():void {
   this.themeText = this.themeService.currentTheme();
   this.setThemeText();
+  let user = this.authService.getCache("currentUser");
+  if(user){
+    this.userName = user.lastName;
+  }
  }
 
  toggleNotifications() {

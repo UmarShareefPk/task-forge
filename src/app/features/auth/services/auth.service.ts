@@ -27,6 +27,10 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('teamUsers');
+    localStorage.removeItem('teamInfo');
+
     this._loggedIn.set(false); 
     this.router.navigate(['/login']);
   }
@@ -51,4 +55,35 @@ export class AuthService {
       return true; // invalid token = expired
     }
 }
+
+
+saveCacheInfo(loginResponse:any):void {
+  if (loginResponse) {
+    localStorage.setItem('currentUser', JSON.stringify(loginResponse.user));
+    localStorage.setItem('teamUsers', JSON.stringify(loginResponse.teamUsers));
+    localStorage.setItem('teamInfo', JSON.stringify(loginResponse.team));
+
+  }
+}
+
+/**
+ * Retrieves cached data from localStorage based on the given source.
+ *
+ * @param source - The type of data to fetch. Supported values:
+ *   - "currentUser" → returns the currently logged-in user's info
+ *   - "teamUsers"  → returns the list of users in the team
+ *   - "teamInfo"   → returns team-related information
+ *
+ * @returns The parsed JSON object from localStorage, or `null` if not found/invalid.
+ */
+getCache(source:string):any {
+  if(source == "currentUser")
+    return JSON.parse(localStorage.getItem('currentUser') || "");
+  else if(source == "teamUsers")
+    return JSON.parse(localStorage.getItem('teamUsers') || "");
+  else if(source == "teamInfo")
+    return JSON.parse(localStorage.getItem('teamInfo') || "");
+
+}
+
 }

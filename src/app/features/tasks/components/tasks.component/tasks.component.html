@@ -1,19 +1,21 @@
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 py-6">
-  <div class="container mx-auto">
+<div
+  class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 py-8"
+>
+  <div class=" xl:container  xl:mx-auto">
     <div
-      class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700"
+      class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700"
     >
       <!-- Page Title -->
       <app-page-title
         title="Tasks"
         subtitle="Manage and track all ongoing work"
         icon="check_circle"
-      >
-      </app-page-title>
+      ></app-page-title>
 
-      <!-- Search box -->
-      <div class="mb-4 flex justify-start">
-        <div class="relative w-full sm:w-64">
+      <!-- Search & Actions -->
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <!-- Search box -->
+        <div class="relative w-full sm:w-72">
           <span
             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
           >
@@ -25,110 +27,176 @@
             (ngModelChange)="onSearchChange($event)"
             placeholder="Search tasks..."
             class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
-                   rounded-lg shadow-sm focus:outline-none focus:ring-2 
+                   rounded-full shadow-sm focus:outline-none focus:ring-2 
                    focus:ring-indigo-500 focus:border-indigo-500 
                    bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                    placeholder-gray-400 dark:placeholder-gray-500 transition"
           />
         </div>
+
+        <!-- Add Task button -->
+        <button
+          class="px-4 py-2 rounded-full shadow-md bg-indigo-600 text-white 
+                 hover:bg-indigo-700 transition-colors flex items-center gap-2"
+        >
+          <span class="material-icons text-sm">add</span>
+          Add Task
+        </button>
       </div>
 
       <!-- Loading -->
       <app-loading *ngIf="loading"></app-loading>
 
       <!-- Table -->
-      <div class="overflow-x-auto">
-        <table
-          *ngIf="!loading && tasks.length"
-          class="min-w-full border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm text-sm sm:text-base"
+     <div class="overflow-x-auto lg:overflow-x-visible rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+  <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 table-fixed">
+  <!-- Table Header -->
+  <thead class="bg-gray-100 dark:bg-gray-800">
+    <tr>
+      <!-- Title -->
+      <th
+        class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
+        (click)="sort('title')"
+      >
+        Title
+        <span class="ml-1 material-icons text-xs align-middle">
+          {{ getSortIcon('title') }}
+        </span>
+      </th>
+
+      <!-- Status -->
+      <th
+        class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
+        (click)="sort('status')"
+      >
+        Status
+        <span class="ml-1 material-icons text-xs align-middle">
+          {{ getSortIcon('status') }}
+        </span>
+      </th>
+
+      <!-- Priority -->
+      <th
+        class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
+        (click)="sort('priority')"
+      >
+        Priority
+        <span class="ml-1 material-icons text-xs align-middle">
+          {{ getSortIcon('priority') }}
+        </span>
+      </th>
+
+      <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">Assignee</th>
+      <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100">Reporter</th>
+      <th
+        class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
+        (click)="sort('dueDate')"
+      >
+        Due Date
+        <span class="ml-1 material-icons text-xs align-middle">
+          {{ getSortIcon('dueDate') }}
+        </span>
+      </th>
+      <th
+        class="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 cursor-pointer"
+        (click)="sort('createdAt')"
+      >
+        Created At
+        <span class="ml-1 material-icons text-xs align-middle">
+          {{ getSortIcon('createdAt') }}
+        </span>
+      </th>
+    </tr>
+  </thead>
+
+  <!-- Table Body -->
+  <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+    <tr
+      *ngFor="let task of tasks; let i = index"
+      class="bg-white dark:bg-gray-900 odd:bg-gray-50 dark:odd:bg-gray-800/50 
+             shadow-sm rounded-xl my-2 transition-all duration-200
+             hover:shadow-md hover:scale-[1.01] cursor-pointer"
+    >
+      <!-- Title (clickable) -->
+      <td class="px-6 py-4 text-gray-900 dark:text-gray-100 font-medium rounded-l-xl">
+        <!-- <span
+          (click)="viewTaskDetails(task._id)"
+          class="text-indigo-600 dark:text-indigo-400 hover:underline hover:font-semibold cursor-pointer"
         >
-          <thead class="bg-gray-100 dark:bg-gray-800">
-            <tr>
-              <th
-                *ngFor="let header of ['Title', 'Status', 'Priority', 'Assigned To', 'Due Date', 'Created At']"
-                class="px-3 sm:px-5 py-2 sm:py-3 text-left font-semibold text-gray-700 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700"
-              >
-                {{ header }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let task of tasks; let i = index"
-              class="transition-colors duration-200"
-              [ngClass]="{
-                'bg-white dark:bg-gray-900': i % 2 === 0,
-                'bg-gray-50 dark:bg-gray-800': i % 2 !== 0
-              }"
-            >
-              <!-- Title -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 font-medium">
-               <span (click)="viewTaskDetails(task._id)" class="cursor-pointer hover:underline"> {{ task.title }} </span>
-              </td>
+          {{ task.title }}
+        </span> -->
+        <a  class="text-indigo-600 dark:text-indigo-400 hover:underline hover:font-semibold cursor-pointer"
+        [routerLink]="['/task-details', task.id]"> {{task.title}}</a>
+      </td>
 
-              <!-- Status -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
-                <div class="flex items-center gap-2">
-                  <span class="material-icons {{ (task.status | iconMap:'status').color }}">
-                    {{ (task.status | iconMap:'status').icon }}
-                  </span>
-                  <span class="capitalize">{{ task.status }}</span>
-                </div>
-              </td>
+      <!-- Status -->
+      <td class="px-6 py-4 text-gray-800 dark:text-gray-100">
+        <div class="flex items-center gap-2">
+          <span class="material-icons {{ (task.status | iconMap:'status').color }}">
+            {{ (task.status | iconMap:'status').icon }}
+          </span>
+          <span class="capitalize">{{ task.status }}</span>
+        </div>
+      </td>
 
-              <!-- Priority -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100">
-                <div class="flex items-center gap-2">
-                  <span class="material-icons {{ (task.priority | iconMap:'severity').color }}">
-                    {{ (task.priority | iconMap:'severity').icon }}
-                  </span>
-                  <span class="capitalize">{{ task.priority }}</span>
-                </div>
-              </td>
+      <!-- Priority -->
+      <td class="px-6 py-4 text-gray-800 dark:text-gray-100">
+        <div class="flex items-center gap-2">
+          <span class="material-icons {{ (task.priority | iconMap:'severity').color }}">
+            {{ (task.priority | iconMap:'severity').icon }}
+          </span>
+          <span class="capitalize">{{ task.priority }}</span>
+        </div>
+      </td>
 
-              <!-- Assigned To -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 capitalize text-gray-800 dark:text-gray-100">
-                {{ task.assignedTo }}
-              </td>
+      <!-- Assigned To -->
+      <td class="px-6 py-4 capitalize text-gray-800 dark:text-gray-100">
+        {{ task.assignedTo | nameByUserId }}
+      </td>
 
-              <!-- Due Date -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
-                <app-tooltip
-                  [displayText]="task.dueDate | relativeTime"
-                  [tooltipText]="task.dueDate | relativeTime:true"
-                >
-                </app-tooltip>
-              </td>
+         <!-- Created By -->
+      <td class="px-6 py-4 capitalize text-gray-800 dark:text-gray-100">
+        {{ task.createdBy | nameByUserId }}
+      </td>
 
-              <!-- Created At -->
-              <td class="px-3 sm:px-5 py-2 sm:py-3 text-gray-800 dark:text-gray-100 relative group">
-                <app-tooltip
-                  [displayText]="task.createdAt | relativeTime"
-                  [tooltipText]="task.createdAt | relativeTime:true"
-                >
-                </app-tooltip>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <!-- Due Date -->
+      <td class="px-6 py-4 text-gray-800 dark:text-gray-100">
+        <app-tooltip
+          [displayText]="task.dueDate | relativeTime"
+          [tooltipText]="task.dueDate | relativeTime:true"
+        ></app-tooltip>
+      </td>
+
+      <!-- Created At -->
+      <td class="px-6 py-4 text-gray-800 dark:text-gray-100 rounded-r-xl">
+        <app-tooltip
+          [displayText]="task.createdAt | relativeTime"
+          [tooltipText]="task.createdAt | relativeTime:true"
+        ></app-tooltip>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
       </div>
 
-            <!-- No Data Found -->
+      <!-- No Data Found -->
       <div
         *ngIf="!loading && tasks.length === 0"
-        class="flex flex-col items-center justify-center py-16 text-center text-gray-500 dark:text-gray-400 animate-fadeIn"
+        class="flex flex-col items-center justify-center py-20 text-center text-gray-500 dark:text-gray-400 animate-fadeIn"
       >
         <span
-          class="material-icons text-6xl mb-3 text-gray-300 dark:text-gray-600 animate-bounce-slow"
+          class="material-icons text-7xl mb-4 text-gray-300 dark:text-gray-600 animate-bounce"
         >
           inbox
         </span>
-        <p class="text-lg font-medium">No Data Found</p>
-        <p class="text-sm">Try adjusting your search or filters</p>
+        <p class="text-lg font-semibold">No Tasks Found</p>
+        <p class="text-sm mt-1">Try adjusting your search or filters</p>
       </div>
 
       <!-- Pagination -->
-      <div class="mt-4">
+      <div class="mt-6">
         <app-pagination
           [initialPageNumber]="pageNumber"
           [totalRecords]="totalCount"

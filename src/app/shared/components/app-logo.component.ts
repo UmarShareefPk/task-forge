@@ -26,13 +26,17 @@ import { Component, Input } from '@angular/core';
       <span class="text-gray-900 dark:text-white">
         Task<span class="text-indigo-600 dark:text-indigo-400">Forge</span>
       </span>
-      <!-- <img src="../assets/logo.png" alt="TaskForge Logo"  /> -->
+      <!-- <div>
+      <img src="/assets/logo.png" alt="TaskForge Logo" height="10" width="60" style="background-color: wheat;" />
+      </div> -->
     </div>
   `,
   styles: [],
 })
 export class LogoComponent {
   @Input() size: 'sm' | 'md' | 'lg' | 'custom' = 'md'
+
+  logo:any = '/assets/logo.png'
 
   get sizeClass(): string {
     switch (this.size) {

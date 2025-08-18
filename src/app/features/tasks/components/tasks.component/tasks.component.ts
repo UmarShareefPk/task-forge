@@ -10,11 +10,13 @@ import { TooltipComponent } from "../../../../shared/components/tooltip.componen
 import { PageTitleComponent } from "../../../../shared/components/page-title.component";
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { NameByUserIdPipe } from "../../../../shared/pipes/name-by-user-id.pipe-pipe";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-tasks',
-  imports: [CommonModule,  RelativeTimePipe, FormsModule,
-     PaginationComponent, LoadingComponent, IconMapPipe, TooltipComponent, PageTitleComponent],
+  imports: [CommonModule, RelativeTimePipe, FormsModule, RouterModule,
+    PaginationComponent, LoadingComponent, IconMapPipe, TooltipComponent, PageTitleComponent, NameByUserIdPipe],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css'
 })
@@ -32,6 +34,32 @@ viewTaskDetails(taskId: string) {
   loading = true;
   searchText = '';
   private searchSubject = new Subject<string>();
+
+  sortField: string = '';
+sortDirection: 'asc' | 'desc' = 'asc';
+
+sort(field: string) {
+  if (this.sortField === field) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortField = field;
+    this.sortDirection = 'asc';
+  }
+
+  this.tasks.sort((a: any, b: any) => {
+    const valA = a[field];
+    const valB = b[field];
+
+    if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+    if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+getSortIcon(field: string): string {
+  if (this.sortField !== field) return 'unfold_more'; // default icon
+  return this.sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
+}
 
   constructor(private taskService: TaskService) {
        this.searchSubject

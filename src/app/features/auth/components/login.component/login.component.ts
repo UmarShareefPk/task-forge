@@ -37,6 +37,7 @@ constructor(
       next: (res:any) => {
         console.log(res);
         this.authService.saveToken(res.token);
+        this.authService.saveCacheInfo(res);
         this.router.navigate(['/tasks']);
       },
       error: (e) => {

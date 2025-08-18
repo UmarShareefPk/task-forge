@@ -15,13 +15,18 @@ export class ClickOutsideDirective {
 
 @HostListener('document:click', ['$event.target'])
 public onClick(targetElement: EventTarget | null) {
+  //console.log("Document click detected", targetElement);
+
   if (!(targetElement instanceof HTMLElement)) {
     return;
   }
 
   const clickedInside = this.elementRef.nativeElement.contains(targetElement);
   if (!clickedInside) {
+   // console.log("Click was outside → emitting");
     this.clickOutside.emit();
+  } else {
+   // console.log("Click was inside → nothing emitted");
   }
 }
 }

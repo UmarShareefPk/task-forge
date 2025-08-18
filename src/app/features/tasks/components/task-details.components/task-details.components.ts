@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { CommentService } from '../../services/comment.service';
@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-task-details.components',
@@ -27,9 +28,17 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './task-details.components.html',
   styleUrl: './task-details.components.css'
 })
-export class TaskDetailsComponents {
+export class TaskDetailsComponents implements OnInit {
 
-  constructor(private taskService: TaskService, private commentService: CommentService) {}
+  constructor(private taskService: TaskService, private commentService: CommentService, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.taskId = params.get('id') ?? '';
+      console.log('Task ID:', this.taskId);
+    });
+  }
+taskId!: string;
 
   task = {
     _id : "1",
@@ -43,6 +52,8 @@ export class TaskDetailsComponents {
     createdAt: new Date('2025-08-01T10:00:00'),
     updatedAt: new Date('2025-08-13T14:00:00')
   };
+
+
 
   attachments = [
     { name: 'Requirements.docx', url: '#' },
