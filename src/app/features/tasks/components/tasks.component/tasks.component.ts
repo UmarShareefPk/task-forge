@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
 import { RelativeTimePipe } from '../../../../shared/pipes/relative-time.pipe';
@@ -12,6 +12,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NameByUserIdPipe } from "../../../../shared/pipes/name-by-user-id.pipe-pipe";
 import { RouterModule } from '@angular/router';
+import { FilterStore } from '../../../../core/stores/filter.store';
 
 @Component({
   selector: 'app-tasks',
@@ -21,6 +22,23 @@ import { RouterModule } from '@angular/router';
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent implements OnInit {
+ 
+
+  constructor(private taskService: TaskService, public filter: FilterStore) {
+       this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(text => {
+        this.pageNumber = 1; // reset to first page when searching
+        this.loadTasks(text);
+      });
+
+       // Re-run only when user clicks Refresh (version changes)
+    effect(() => {
+      const { fromDate, toDate, userId, status } = this.filter.applied();
+      //this.load({ fromDate, toDate, userId, status });
+    });
+  }
+
 viewTaskDetails(taskId: string) {
     // Navigate to task details page with the selected task ID
     window.location.href = `/task-details?taskId=${taskId}`;
@@ -61,14 +79,7 @@ getSortIcon(field: string): string {
   return this.sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward';
 }
 
-  constructor(private taskService: TaskService) {
-       this.searchSubject
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(text => {
-        this.pageNumber = 1; // reset to first page when searching
-        this.loadTasks(text);
-      });
-  }
+
 
     onSearchChange(value: string) {
     this.searchSubject.next(value);

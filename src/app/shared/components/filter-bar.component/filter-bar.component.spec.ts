@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TasksMainComponent } from './tasks-main.component';
+import { FilterBarComponent } from './filter-bar.component';
 
-describe('TasksMainComponent', () => {
-  let component: TasksMainComponent;
-  let fixture: ComponentFixture<TasksMainComponent>;
+describe('FilterBarComponent', () => {
+  let component: FilterBarComponent;
+  let fixture: ComponentFixture<FilterBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TasksMainComponent]
+      imports: [FilterBarComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TasksMainComponent);
+    fixture = TestBed.createComponent(FilterBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
