@@ -20,7 +20,11 @@ export class TaskService {
     pageNumber: number,
     sortBy?: string,
     sortDirection?: 'asc' | 'desc',
-    search?: string
+    search?: string,
+    status?: string | null,
+    userId?: string| null,
+    fromDate?: string | null,
+    toDate?: string| null,
   ): Observable<PagedResult<Task>> {
     let params = new HttpParams()
       .set('pageSize', pageSize)
@@ -29,6 +33,11 @@ export class TaskService {
     if (sortBy) params = params.set('sortBy', sortBy);
     if (sortDirection) params = params.set('sortDirection', sortDirection);
     if (search) params = params.set('search', search);
+    if (status) params = params.set('status', status);
+    if (userId) params = params.set('userId', userId);
+    if (fromDate) params = params.set('fromDate', fromDate);
+    if (toDate) params = params.set('toDate', toDate);
+   
 
     return this.http.get<PagedResult<Task>>(`${environment.apiBaseUrl}/taskitems/paged`, { params });
   }

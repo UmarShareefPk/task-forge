@@ -6,7 +6,7 @@ import { TaskDetailsComponents } from './features/tasks/components/task-details.
 
 
 export const routes: Routes = [
-{ path: '', redirectTo: 'home', pathMatch: 'full' },
+{ path: '', redirectTo: 'tasks', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'tasks', component: TasksComponent, canActivate: [authGuard] },
 { path: 'task-details/:id', component: TaskDetailsComponents, canActivate: [authGuard] },

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { reportUnhandledError } from 'rxjs/internal/util/reportUnhandledError';
 import { ThemeService } from './core/services/theme.service';
 import { FilterBarComponent } from "./shared/components/filter-bar.component/filter-bar.component";
+import { FilterStore } from './core/stores/filter.store';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,8 @@ import { FilterBarComponent } from "./shared/components/filter-bar.component/fil
 export class App {
     // Access the computed signal
 
-  constructor(private authService:AuthService, private router:Router, private themeService:ThemeService){
-    effect(() => {
-      console.log("effect is called");
+  constructor(private authService:AuthService, private router:Router, private themeService:ThemeService, public filter:FilterStore){
+    effect(() => {  
       this.isUserLoggedIn = this.authService._isLoggedIn();
       if (!this.isUserLoggedIn) {
         console.log("User logged out → navigating to /login");

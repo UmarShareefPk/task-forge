@@ -19,7 +19,11 @@ export class FilterStore {
   // bump this when user hits "Refresh"
   private readonly _version = signal(0);
 
-  // --- setters (what you asked for) ---
+  showFilter  = true;
+  showStatus  = true;
+  showUsers   = true;
+
+  // --- setters ---
   setFromDate(v: string | null) { this.fromDate.set(v || null); }
   setToDate(v: string | null)   { this.toDate.set(v || null); }
   setUserId(v: string | null)   { this.userId.set(v || null); }
@@ -33,8 +37,11 @@ export class FilterStore {
     if ('status' in p)   this.setStatus(p.status ?? null);
   }
 
-  // click "Refresh" -> consumers react to version change
-  apply() { this._version.update(v => v + 1); }
+  // click "Refresh" -> bump version
+  apply() { 
+    this._version.update(v => v + 1); 
+    console.log('apply called');
+  }
 
   reset() {
     this.fromDate.set(null);
@@ -44,7 +51,7 @@ export class FilterStore {
     this.apply();
   }
 
-  // convenient snapshot of current fields (without version)
+  // snapshot of current values
   getFilters(): Filters {
     return {
       fromDate: this.fromDate(),
@@ -54,18 +61,15 @@ export class FilterStore {
     };
   }
 
-  // what consumers should read inside an effect()
-  // includes version so it re-runs only when user presses Refresh
+  // consumers listen only to version changes
   readonly applied = computed(() => ({
-    ...this.getFilters(),
-    version: this._version(), // dependency
+    version: this._version(),
   }));
 
-  // optional: shape for API (ISO strings)
+  // optional: shape for API
   getFiltersForApi() {
     const toIso = (d: string | null, endOfDay = false) => {
       if (!d) return null;
-      // d is 'yyyy-MM-dd'
       const date = new Date(d + (endOfDay ? 'T23:59:59.999' : 'T00:00:00.000'));
       return date.toISOString();
     };
