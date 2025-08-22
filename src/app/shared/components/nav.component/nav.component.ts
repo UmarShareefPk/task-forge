@@ -15,7 +15,8 @@ import { ClickOutsideDirective } from '../../directives/click-outside.directive'
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
-    userName = 'Umar';
+    userName = '';
+    teamName = 'team name here';
   userImageUrl = 'https://i.pravatar.cc/100';
   showMenu:boolean = false;
   themeText:string = "dark";
@@ -46,7 +47,11 @@ toggleMobileMenu() {
   this.setThemeText();
   let user = this.authService.getCache("currentUser");
   if(user){
-    this.userName = user.lastName;
+    this.userName = user.firstName + " " +  user.lastName;
+  }
+  let team  = this.authService.getCache("teamInfo");
+  if(team){
+    this.teamName = team.teamName + " Team";
   }
  }
 

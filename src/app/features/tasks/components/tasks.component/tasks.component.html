@@ -8,44 +8,44 @@
     <div
       class="max-w-full m-2 p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700"
     >
-      <!-- Page Title -->
-      <app-page-title
-        title="Tasks"
-        subtitle="Manage and track all ongoing work"
-        icon="check_circle"
-      ></app-page-title>
+     
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+  
+  <!-- Page Title component -->
+  <app-page-title
+    title="Tasks"
+    subtitle="Manage and track all ongoing work"
+    icon="check_circle"
+    class="flex-shrink-0"
+  ></app-page-title>
 
-      <!-- Search & Actions -->
-      <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <!-- Search box -->
-        <div class="relative w-full sm:w-72">
-          <span
-            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-          >
-            <span class="material-icons text-gray-400">search</span>
-          </span>
-          <input
-            type="text"
-            [(ngModel)]="searchText"
-            (ngModelChange)="onSearchChange($event)"
-            placeholder="Search tasks..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
-                   rounded-full shadow-sm focus:outline-none focus:ring-2 
-                   focus:ring-indigo-500 focus:border-indigo-500 
-                   bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                   placeholder-gray-400 dark:placeholder-gray-500 transition"
-          />
-        </div>
+  <!-- Search -->
+  <div class="relative w-full sm:w-72">
+    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <span class="material-icons text-gray-400">search</span>
+    </span>
+    <input
+      type="text"
+      [(ngModel)]="searchText"
+      (ngModelChange)="onSearchChange($event)"
+      placeholder="Search tasks..."
+      class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 
+             rounded-full shadow-sm focus:outline-none focus:ring-2 
+             focus:ring-indigo-500 focus:border-indigo-500 
+             bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+             placeholder-gray-400 dark:placeholder-gray-500 transition"
+    />
+  </div>
 
-        <!-- Add Task button -->
-        <button
-          class="px-4 py-2 rounded-full shadow-md bg-indigo-600 text-white 
-                 hover:bg-indigo-700 transition-colors flex items-center gap-2"
-        >
-          <span class="material-icons text-sm">add</span>
-          Add Task
-        </button>
-      </div>
+  <!-- Add Task -->
+  <button
+    class="px-4 py-2 rounded-full shadow-md bg-indigo-600 text-white 
+           hover:bg-indigo-700 transition-colors flex items-center gap-2"
+  >
+    <span class="material-icons text-sm">add</span>
+    Add Task
+  </button>
+</div>
 
       <!-- Loading -->
       <app-loading *ngIf="loading"></app-loading>

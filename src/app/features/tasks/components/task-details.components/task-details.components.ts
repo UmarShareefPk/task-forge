@@ -14,6 +14,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
+import { FilterStore } from '../../../../core/stores/filter.store';
 
 @Component({
   selector: 'app-task-details.components',
@@ -30,9 +31,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TaskDetailsComponents implements OnInit {
 
-  constructor(private taskService: TaskService, private commentService: CommentService, private route: ActivatedRoute) {}
+  constructor(private taskService: TaskService,
+     private commentService: CommentService, 
+     private route: ActivatedRoute,
+    private filter:FilterStore
+    ) {}
 
   ngOnInit(): void {
+    this.filter.showFilter = false;
     this.route.paramMap.subscribe(params => {
       this.taskId = params.get('id') ?? '';
       console.log('Task ID:', this.taskId);
